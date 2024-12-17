@@ -14,15 +14,22 @@ mkfs.ext4 $ROOT_PART
 mkswap $SWAP_PART
 swapon $SWAP_PART
 
+pause() {
+  read -p "click Enter to continue..."
+}
+
 # Монтирование разделов
 mount $ROOT_PART /mnt
 mount --mkdir $EFI_PART /mnt/boot/efi
+pause
 
 # Установка базовой системы
 pacstrap /mnt base base-devel linux linux-headers linux-firmware
+pause
 
 # Генерация fstab
 genfstab -U /mnt >> /mnt/etc/fstab
+pause
 
 # Настройка системы в chroot
 arch-chroot /mnt bash -c "\
@@ -68,6 +75,7 @@ EOF
 "
 
 # Завершение установки
+pause
 umount -R /mnt
 echo "Установка завершена. Перезагрузите систему."
 reboot
