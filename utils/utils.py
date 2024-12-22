@@ -1,5 +1,5 @@
 import subprocess
-from modules.config import DEBUG
+from utils.config import DEBUG
 
 class Print:
     COLORS = {

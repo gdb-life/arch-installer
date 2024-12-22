@@ -15,12 +15,9 @@
         "btrfs-progs", 
         "vim", 
         "git",
-        "networkmanager",
-        "sddm",
-        "sddm-kcm"
+        "networkmanager"
         ],
     "enable_services": [
-        "NetworkManager",
-        "sddm"
+        "NetworkManager"
     ]
 }

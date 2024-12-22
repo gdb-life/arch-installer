@@ -1,7 +1,8 @@
 import argparse
 import json
-from modules.utils import Print
-from modules import config, disk, check, packages, setup
+from utils.utils import Print
+from utils import config
+from modules import disk, check, packages, setup
 
 def load_config(file_path):
     with open("configs/" + file_path + ".json", "r") as f:

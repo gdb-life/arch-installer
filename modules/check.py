@@ -1,4 +1,4 @@
-from modules.utils import Print, run_cmd
+from utils.utils import Print, run_cmd
 
 def pacman_keys():
     keys = Print.input("Update pacman keys? (yes/no) ").lower() == "yes"

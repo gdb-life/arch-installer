@@ -1,4 +1,4 @@
-from modules.utils import Print, run_cmd
+from utils.utils import Print, run_cmd
 
 def partition_disks(disk):
     Print.info("Disk partitioning...")
