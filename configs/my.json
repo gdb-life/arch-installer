@@ -1,0 +1,26 @@
+{
+    "disk": 
+        "/dev/sda",
+    "hostname": 
+        "gdb",
+    "username": 
+        "tvs",
+    "packages": [
+        "base", 
+        "base-devel", 
+        "linux", 
+        "linux-headers", 
+        "linux-firmware", 
+        "amd-ucode", 
+        "btrfs-progs", 
+        "vim", 
+        "git",
+        "networkmanager",
+        "sddm",
+        "sddm-kcm"
+        ],
+    "enable_services": [
+        "NetworkManager",
+        "sddm"
+    ]
+}
