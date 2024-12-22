@@ -1,6 +1,7 @@
 # Arch Installer
 
 Arch Installer is a Python-based utility for automating the installation of Arch Linux. The tool provides options for full installation or installation without configuring disk layouts, while allowing user customization of configuration parameters.
+!!! This project is not yet designed to be installed on other devices.
 
 ## Requirements
 
