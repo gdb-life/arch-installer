@@ -1,46 +1,33 @@
-from utils.utils import Print, run_cmd
+from utils.logger import Print
+from utils.commands import run_cmd
 
-def partition_disks(disk):
+def markup(disk):
     Print.info("Disk partitioning...")
     cfdisk = Print.input("Mark up a disk manually? (yes/no) ").lower() == "yes"
-
     if cfdisk:
-        try:
-            run_cmd(["cfdisk", disk])
-            Print.success("Partitioning complete")
-        except Exception as e:
-            Print.error(f"Failed to mark up a disk: {e}")
+        run_cmd(f"cfdisk {disk}")
     else:
         Print.info("Manually mark up skipped")
-        try:
-            run_cmd(["parted", disk, "mklabel", "gpt"])
-            run_cmd(["parted", disk, "mkpart", "primary", "fat32", "0%", "1GiB"])
-            run_cmd(["parted", disk, "set", "1", "esp", "on"])
-            run_cmd(["parted", disk, "mkpart", "primary", "linux-swap", "1GiB", "9GiB"])
-            run_cmd(["parted", disk, "mkpart", "primary", "btrfs", "9GiB", "100%"])
-            Print.success("Partitioning complete")
-        except Exception as e:
-            Print.error(f"Failed to mark up a disk: {e}")
-
-    try:
-        run_cmd(["mkfs.fat", "-F32", f"{disk}1"])
-        run_cmd(["mkswap", f"{disk}2"])
-        run_cmd(["swapon", f"{disk}2"])
-        run_cmd(["mkfs.btrfs", "-f", f"{disk}3"])
-        Print.success("Formating complete")
-    except Exception as e:
-        Print.error(f"Failed to formating disk: {e}")
-
+        run_cmd(f"parted {disk} mklabel gpt")
+        run_cmd(f"parted {disk} mkpart primary fat32 0% 1GiB")
+        run_cmd(f"parted {disk} set 1 esp on")
+        run_cmd(f"parted {disk} mkpart primary linux-swap 1GiB 9GiB")
+        run_cmd(f"parted {disk} mkpart primary btrfs 9GiB 100%")
+    Print.success("Partitioning complete")
     print()
 
-def mount_disks(disk):
-    Print.info("Mounting disks...")
+def format(disk):
+    Print.info("Formatting disks...")
+    run_cmd(f"mkfs.fat -F32 {disk}1")
+    run_cmd(f"mkswap {disk}2")
+    run_cmd(f"swapon {disk}2")
+    run_cmd(f"mkfs.btrfs -f {disk}3")
+    Print.success("Formating complete")
+    print()
 
-    try:
-        run_cmd(["mount", f"{disk}3", "/mnt"])
-        run_cmd(["mount", "--mkdir", f"{disk}1", "/mnt/boot/efi"])
-        Print.success("Mount complete")
-    except Exception as e:
-        Print.error(f"Failed to mount disk: {e}")
-        
+def mount(disk):
+    Print.info("Mounting disks...")
+    run_cmd(f"mount {disk}3 /mnt")
+    run_cmd(f"mount --mkdir {disk}1 /mnt/boot/efi")
+    Print.success("Mount complete")
     print()

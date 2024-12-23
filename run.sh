@@ -1,0 +1,1 @@
+python main.py --customize --config my --debug

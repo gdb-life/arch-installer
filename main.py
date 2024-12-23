@@ -1,7 +1,7 @@
 import argparse
 import json
-from utils.utils import Print
-from utils import config
+from utils.logger import Print
+from utils import settings
 from modules import disk, check, packages, setup
 
 def load_config(file_path):
@@ -39,7 +39,6 @@ parser = argparse.ArgumentParser(description="Arch Installer: auto isntall Arch 
 parser.add_argument("--config", type=str, help="Path to configuration file")
 parser.add_argument("--customize", action="store_true", help="Customize configuration")
 parser.add_argument("--debug", action="store_true", help="Show debug information")
-parser.add_argument("--docker", action="store_true", help="Argument for testing in docker")
 args = parser.parse_args()
 
 if args.config:
@@ -47,7 +46,8 @@ if args.config:
     print_config_data(config_data)
 
     if args.debug:
-        config.DEBUG = True
+        # Print.debug(f"Debugging enabled")
+        settings.DEBUG = True
     
     if args.customize:
         config_data = customize_config(config_data)
@@ -55,16 +55,16 @@ else:
     Print.error("No configuration file provided. Use --config to specify a configuration")
     exit(1)
 
-disk.partition_disks(config_data["disk"])
-disk.mount_disks(config_data["disk"])
+disk.markup(config_data["disk"])
+disk.format(config_data["disk"])
+disk.mount(config_data["disk"])
 
 check.pacman_keys()
 check.pacman_mirrors()
 
 packages.install_packages(config_data["packages"])
 
-if not args.docker:
-    setup.install_grub(config_data["disk"])
+setup.install_grub(config_data["disk"])
 setup.configure_system(config_data["hostname"])
 setup.create_user(config_data["username"])
 setup.enable_services(config_data["enable_services"])

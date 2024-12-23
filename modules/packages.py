@@ -1,10 +1,8 @@
-from utils.utils import Print, run_cmd
+from utils.logger import Print
+from utils.commands import run_cmd
 
 def install_packages(packages):
-    try:
-        Print.info("Install base packages...")
-        run_cmd(["pacstrap", "/mnt"] + packages)
-        Print.success("Packages installed")
-    except Exception as e:
-        Print.error(f"Failed to isntall package: {e}")
+    Print.info("Install base packages...")
+    run_cmd("pacstrap /mnt " + " ".join(packages))
+    Print.success("Packages installed")
     print()
