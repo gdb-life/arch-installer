@@ -53,14 +53,14 @@ if args.config:
     if args.customize:
         config_data = customize_config(config_data)
 
-    disk.markup(config_data["disk"])
-    disk.format(config_data["disk"])
-    disk.mount(config_data["disk"])
-
     check.check_dependencies()
     Print.info("The following updates will be made on the image")
     check.pacman_keys()
     check.pacman_mirrors()
+
+    disk.markup(config_data["disk"])
+    disk.format(config_data["disk"])
+    disk.mount(config_data["disk"])
 
     packages.install_packages(config_data["packages"])
 
@@ -72,9 +72,10 @@ if args.config:
 
 elif args.test:
     check.check_dependencies()
+    Print.info("The following updates will be made on the image")
     check.pacman_keys()
     check.pacman_mirrors()
-
+    
 else:
     Print.error("No configuration file provided. Use --config to specify a configuration")
     exit(1)
