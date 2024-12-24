@@ -1,18 +1,13 @@
 {
     "disk": "/dev/sda",
-    "hostname": "gdb",
-    "username": "tvs",
-    "locale": "en_US.UTF-8",
+    "hostname": "arch",
+    "username": "user",
+    "locale": "en_US",
     "packages": [
         "base", 
         "base-devel", 
         "linux", 
-        "linux-headers", 
         "linux-firmware", 
-        "amd-ucode", 
-        "btrfs-progs", 
-        "vim", 
-        "git",
         "networkmanager"
         ],
     "enable_services": [

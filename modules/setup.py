@@ -11,12 +11,12 @@ def install_grub(disk):
     print()
 
 
-def configure_system(hostname):
+def configure_system(hostname, locale):
     Print.info("Configuring locale...")
     locale_file = "/mnt/etc/locale.gen"
     with open(locale_file, "r+") as f:
         content = f.read()
-        content = content.replace("#en_US.UTF-8 UTF-8", "en_US.UTF-8 UTF-8")
+        content = content.replace(f"# {locale}.UTF-8 UTF-8", f"{locale}.UTF-8 UTF-8")
         f.seek(0)
         f.write(content)
         f.truncate()

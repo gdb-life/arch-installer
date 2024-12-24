@@ -12,12 +12,13 @@ def customize_config(config):
     config["disk"] = Print.input(f"Disk [{config.get('disk', '/dev/sda')}]: ") or config["disk"]
     config["hostname"] = Print.input(f"Hostname [{config.get('hostname', 'archlinux')}]: ") or config["hostname"]
     config["username"] = Print.input(f"Username [{config.get('username', 'user')}]: ") or config["username"]
+    config["locale"] = Print.input(f"Locale [{config.get('locale', 'en_US')}]: ") or config["locale"]
 
-    packages = Print.input(f"Add packages (comma-separated) [{', '.join(config.get('packages', []))}]: ")
+    packages = Print.input(f"Add packages [{', '.join(config.get('packages', []))}]: ")
     if packages:
         config["packages"].extend(packages.split(","))
 
-    services = Print.input(f"Enable services (comma-separated) [{', '.join(config.get('enable_services', []))}]: ")
+    services = Print.input(f"Enable services [{', '.join(config.get('enable_services', []))}]: ")
     if services:
         config["enable_services"].extend(services.split(","))
 
@@ -28,26 +29,26 @@ def print_config_data(config_data):
     Print.info(f"Hostname: {config_data["hostname"]}")
     Print.info(f"Username: {config_data["username"]}")
     Print.info(f"Packages: {config_data["packages"]}")
+    Print.info(f"Locale:   {config_data["locale"]}")
     Print.info(f"Services: {config_data["enable_services"]}")
     print()
 
 def main():
     parser = argparse.ArgumentParser(description="Arch Installer: auto isntall Arch Linux")
     parser.add_argument("--config", type=str, help="path to configuration file")
-    parser.add_argument("--customize", action="store_true", help="customize configuration")
-    parser.add_argument("--debug", action="store_true", help="show debug information")
-    parser.add_argument("--test", action="store_true", help="test mode")
+    parser.add_argument("-c", "--custom", action="store_true", help="customize configuration")
+    parser.add_argument("-d", "--debug", action="store_true", help="show debug information")
+    parser.add_argument("-t", "--test", action="store_true", help="test mode")
     args = parser.parse_args()
 
     if args.debug:
-            # Print.debug(f"Debugging enabled")
             Debug.DEBUG = True
 
     if args.config:
         config_data = load_config(args.config)
         print_config_data(config_data)
         
-        if args.customize:
+        if args.custom:
             config_data = customize_config(config_data)
 
         check.check_dependencies()
@@ -62,7 +63,7 @@ def main():
         packages.install_packages(config_data["packages"])
 
         setup.install_grub(config_data["disk"])
-        setup.configure_system(config_data["hostname"])
+        setup.configure_system(config_data["hostname"], config_data["locale"])
         setup.create_user(config_data["username"])
         setup.enable_services(config_data["enable_services"])
         setup.finish()

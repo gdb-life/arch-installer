@@ -1,7 +1,0 @@
-{
-    "disk": "/dev/sda",
-    "hostname": "minimal",
-    "username": "minimal_user",
-    "packages": ["base"],
-    "enable_services": []
-}

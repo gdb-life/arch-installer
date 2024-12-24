@@ -1,3 +1,0 @@
-# global configuration
-
-DEBUG = False
