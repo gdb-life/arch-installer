@@ -31,51 +31,50 @@ def print_config_data(config_data):
     Print.info(f"Services: {config_data["enable_services"]}")
     print()
 
-# config.DEBUG = Print.input("Print debug information? (yes/no) ").lower() == "yes"
-# if not config.DEBUG:
-#     Print.info("Debug skipped")
+def main():
+    parser = argparse.ArgumentParser(description="Arch Installer: auto isntall Arch Linux")
+    parser.add_argument("--config", type=str, help="path to configuration file")
+    parser.add_argument("--customize", action="store_true", help="customize configuration")
+    parser.add_argument("--debug", action="store_true", help="show debug information")
+    parser.add_argument("--test", action="store_true", help="test mode")
+    args = parser.parse_args()
 
-parser = argparse.ArgumentParser(description="Arch Installer: auto isntall Arch Linux")
-parser.add_argument("--config", type=str, help="Path to configuration file")
-parser.add_argument("--customize", action="store_true", help="Customize configuration")
-parser.add_argument("--debug", action="store_true", help="Show debug information")
-parser.add_argument("--test", action="store_true", help="Test mode")
-args = parser.parse_args()
+    if args.debug:
+            # Print.debug(f"Debugging enabled")
+            Debug.DEBUG = True
 
-if args.debug:
-        # Print.debug(f"Debugging enabled")
-        Debug.DEBUG = True
+    if args.config:
+        config_data = load_config(args.config)
+        print_config_data(config_data)
+        
+        if args.customize:
+            config_data = customize_config(config_data)
 
-if args.config:
-    config_data = load_config(args.config)
-    print_config_data(config_data)
-    
-    if args.customize:
-        config_data = customize_config(config_data)
+        check.check_dependencies()
+        Print.info("The following updates will be made on the image")
+        check.pacman_keys()
+        check.pacman_mirrors()
 
-    check.check_dependencies()
-    Print.info("The following updates will be made on the image")
-    check.pacman_keys()
-    check.pacman_mirrors()
+        disk.markup(config_data["disk"])
+        disk.format(config_data["disk"])
+        disk.mount(config_data["disk"])
 
-    disk.markup(config_data["disk"])
-    disk.format(config_data["disk"])
-    disk.mount(config_data["disk"])
+        packages.install_packages(config_data["packages"])
 
-    packages.install_packages(config_data["packages"])
+        setup.install_grub(config_data["disk"])
+        setup.configure_system(config_data["hostname"])
+        setup.create_user(config_data["username"])
+        setup.enable_services(config_data["enable_services"])
+        setup.finish()
 
-    setup.install_grub(config_data["disk"])
-    setup.configure_system(config_data["hostname"])
-    setup.create_user(config_data["username"])
-    setup.enable_services(config_data["enable_services"])
-    setup.finish()
+    elif args.test:
+        check.check_dependencies()
+        check.pacman_keys()
+        check.pacman_mirrors()
 
-elif args.test:
-    check.check_dependencies()
-    Print.info("The following updates will be made on the image")
-    check.pacman_keys()
-    check.pacman_mirrors()
-    
-else:
-    Print.error("No configuration file provided. Use --config to specify a configuration")
-    exit(1)
+    else:
+        Print.error("No configuration file provided. Use --config to specify a configuration")
+        exit(1)
+
+if __name__ == "__main__":
+    main()
