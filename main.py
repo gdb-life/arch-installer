@@ -39,35 +39,42 @@ parser = argparse.ArgumentParser(description="Arch Installer: auto isntall Arch 
 parser.add_argument("--config", type=str, help="Path to configuration file")
 parser.add_argument("--customize", action="store_true", help="Customize configuration")
 parser.add_argument("--debug", action="store_true", help="Show debug information")
+parser.add_argument("--test", action="store_true", help="Test mode")
 args = parser.parse_args()
+
+if args.debug:
+        # Print.debug(f"Debugging enabled")
+        Debug.DEBUG = True
 
 if args.config:
     config_data = load_config(args.config)
     print_config_data(config_data)
-
-    if args.debug:
-        Print.debug(f"Debugging enabled")
-        Debug.DEBUG = True
-        Print.debug(f"Debug: {Debug.DEBUG}")
     
     if args.customize:
         config_data = customize_config(config_data)
+
+    disk.markup(config_data["disk"])
+    disk.format(config_data["disk"])
+    disk.mount(config_data["disk"])
+
+    check.check_dependencies()
+    Print.info("The following updates will be made on the image")
+    check.pacman_keys()
+    check.pacman_mirrors()
+
+    packages.install_packages(config_data["packages"])
+
+    setup.install_grub(config_data["disk"])
+    setup.configure_system(config_data["hostname"])
+    setup.create_user(config_data["username"])
+    setup.enable_services(config_data["enable_services"])
+    setup.finish()
+
+elif args.test:
+    check.check_dependencies()
+    check.pacman_keys()
+    check.pacman_mirrors()
+
 else:
     Print.error("No configuration file provided. Use --config to specify a configuration")
     exit(1)
-
-disk.markup(config_data["disk"])
-disk.format(config_data["disk"])
-disk.mount(config_data["disk"])
-
-check.pacman_keys()
-check.pacman_mirrors()
-
-packages.install_packages(config_data["packages"])
-
-setup.install_grub(config_data["disk"])
-setup.configure_system(config_data["hostname"])
-setup.create_user(config_data["username"])
-setup.enable_services(config_data["enable_services"])
-setup.finish()
-    
