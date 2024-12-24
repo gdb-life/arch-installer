@@ -1,7 +1,7 @@
 import argparse
 import json
 from utils.logger import Print
-from utils import settings
+from utils.debug import Debug
 from modules import disk, check, packages, setup
 
 def load_config(file_path):
@@ -46,8 +46,9 @@ if args.config:
     print_config_data(config_data)
 
     if args.debug:
-        # Print.debug(f"Debugging enabled")
-        settings.DEBUG = True
+        Print.debug(f"Debugging enabled")
+        Debug.DEBUG = True
+        Print.debug(f"Debug: {Debug.DEBUG}")
     
     if args.customize:
         config_data = customize_config(config_data)
