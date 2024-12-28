@@ -31,48 +31,48 @@ def print_config_data(config_data):
     Print.data("Packages: ", ", ".join(config_data["packages"]))
     Print.data("Locale:   ", config_data["locale"])
     Print.data("Services: ", ", ".join(config_data["enable_services"]))
-    Print.input("Press Enter to continue...")
-    print()
 
 def main():
     parser = argparse.ArgumentParser(description="Arch Installer: auto isntall Arch Linux")
-    parser.add_argument("--config", type=str, help="path to configuration file")
+    parser.add_argument("config", nargs="?", help="Name of the configuration file (without .json)")
     parser.add_argument("-c", "--custom", action="store_true", help="customize configuration")
+    parser.add_argument("-p", "--print", action="store_true", help="print configuration")
     parser.add_argument("-d", "--debug", action="store_true", help="show debug information")
     args = parser.parse_args()
 
     if args.debug:
-            Debug.DEBUG = True
+        Debug.DEBUG = True
+
+    config_data = load_config("standart")
 
     if args.config:
         config_data = load_config(args.config)
+
+    if args.custom:
+        config_data = customize_config(config_data)
+
+    if args.print:
         print_config_data(config_data)
-        
-        if args.custom:
-            config_data = customize_config(config_data)
+        exit(0)
 
-        check.check_dependencies()
-        Print.info("The following updates will be made on the image")
-        check.update_pacman_keys()
-        check.update_pacman_mirrors()
+    check.check_dependencies()
+    Print.info("The following updates will be made on the image")
+    check.update_pacman_keys()
+    check.update_pacman_mirrors()
 
-        disk.markup_disk(config_data["disk"])
-        disk.format_partitions(config_data["disk"])
-        disk.mount_partitions(config_data["disk"])
+    disk.markup_disk(config_data["disk"])
+    disk.format_partitions(config_data["disk"])
+    disk.mount_partitions(config_data["disk"])
 
-        packages.install_packages(config_data["packages"])
+    packages.install_packages(config_data["packages"])
 
-        setup.install_grub(config_data["disk"])
-        setup.configure_system(config_data["hostname"], config_data["locale"])
-        setup.create_user(config_data["username"])
-        setup.enable_services(config_data["enable_services"])
-        setup.finish()
+    setup.install_grub(config_data["disk"])
+    setup.configure_system(config_data["hostname"], config_data["locale"])
+    setup.create_user(config_data["username"])
+    setup.enable_services(config_data["enable_services"])
+    setup.finish()
 
-        Print.success("Installation complete\n")
-
-    else:
-        Print.error("No configuration file provided. Use --config to specify a configuration")
-        exit(1)
+    Print.success("Installation complete\n")
 
 if __name__ == "__main__":
     main()
