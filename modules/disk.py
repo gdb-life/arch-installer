@@ -1,7 +1,7 @@
 from utils.logger import Print
 from utils.commands import run_cmd
 
-def markup(disk):
+def markup_disk(disk):
     Print.info("Disk partitioning...")
     cfdisk = Print.input("Mark up a disk manually? (yes/no) ").lower() == "yes"
     if cfdisk:
@@ -16,7 +16,7 @@ def markup(disk):
     Print.success("Partitioning complete")
     print()
 
-def format(disk):
+def format_partitions(disk):
     Print.info("Formatting disks...")
     run_cmd(f"mkfs.fat -F32 {disk}1")
     run_cmd(f"mkswap {disk}2")
@@ -25,7 +25,7 @@ def format(disk):
     Print.success("Formating complete")
     print()
 
-def mount(disk):
+def mount_partitions(disk):
     Print.info("Mounting disks...")
     run_cmd(f"mount {disk}3 /mnt")
     run_cmd(f"mount --mkdir {disk}1 /mnt/boot/efi")

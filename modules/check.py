@@ -9,7 +9,7 @@ def check_dependencies():
     run_cmd("sudo pacman -S --noconfirm reflector")
     Print.success("Dependencies checked\n")
 
-def pacman_keys():
+def update_pacman_keys():
     keys = Print.input("Update pacman keys? (yes/no) ").lower() == "yes"
     if keys:
         Print.info("Update pacman keys...")
@@ -17,7 +17,7 @@ def pacman_keys():
         Print.success("Pacman keys updated\n")  
     print()
 
-def pacman_mirrors():
+def update_pacman_mirrors():
     mirrors = Print.input("Update pacman mirrors? (yes/no) ").lower() == "yes"
     if mirrors:
         Print.info("Update pacman mirrors...")

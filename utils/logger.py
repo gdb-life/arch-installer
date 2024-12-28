@@ -49,13 +49,11 @@ class Print:
 
     @staticmethod
     def data(message, data):
-        """print data message"""
         data_message = f"{Print.COLORS['WHITE']}{message}{Print.COLORS['RESET']}{data}"
         return print(data_message)
 
     @staticmethod
     def input(prompt):
-        """prompt user input with colored text"""
         colored_prompt = f"{Print.COLORS['WHITE']}{prompt}{Print.COLORS['RESET']}"
         return input(colored_prompt).strip()
 

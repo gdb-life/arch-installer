@@ -8,7 +8,6 @@ else:
     from debug import Debug
 
 def run_cmd(command):
-    """run system command (example arg: "command")"""
     # Print.debug(f"Debug: {Debug.DEBUG}")
     if Debug.DEBUG:
         Print.debug(f"{command}")

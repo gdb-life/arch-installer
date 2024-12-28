@@ -6,12 +6,10 @@ from modules import disk, check, packages, setup
 from test import test_installation
 
 def load_config(file_path):
-    """load configuration from a JSON file"""
     with open("configs/" + file_path + ".json", "r") as f:
         return json.load(f)
 
 def customize_config(config):
-    """customize the configuration"""
     config["disk"] = Print.input(f"Disk [{config.get('disk', '/dev/sda')}]: ") or config["disk"]
     config["hostname"] = Print.input(f"Hostname [{config.get('hostname', 'archlinux')}]: ") or config["hostname"]
     config["username"] = Print.input(f"Username [{config.get('username', 'user')}]: ") or config["username"]
@@ -28,7 +26,6 @@ def customize_config(config):
     return config
 
 def print_config_data(config_data):
-    """print the configuration data"""
     Print.data("Disk:     ", config_data["disk"])
     Print.data("Hostname: ", config_data["hostname"])
     Print.data("Username: ", config_data["username"])
@@ -39,7 +36,6 @@ def print_config_data(config_data):
     print()
 
 def main():
-    """main function"""
     parser = argparse.ArgumentParser(description="Arch Installer: auto isntall Arch Linux")
     parser.add_argument("--config", type=str, help="path to configuration file")
     parser.add_argument("-c", "--custom", action="store_true", help="customize configuration")
@@ -63,12 +59,12 @@ def main():
 
         check.check_dependencies()
         Print.info("The following updates will be made on the image")
-        check.pacman_keys()
-        check.pacman_mirrors()
+        check.update_pacman_keys()
+        check.update_pacman_mirrors()
 
-        disk.markup(config_data["disk"])
-        disk.format(config_data["disk"])
-        disk.mount(config_data["disk"])
+        disk.markup_disk(config_data["disk"])
+        disk.format_partitions(config_data["disk"])
+        disk.mount_partitions(config_data["disk"])
 
         packages.install_packages(config_data["packages"])
 
