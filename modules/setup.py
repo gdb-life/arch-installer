@@ -41,7 +41,7 @@ def configure_system(hostname, locale):
     with open(pacman_conf, "r+") as f:
         content = f.read()
         content = content.replace("#Color", "Color")
-        content = content.replace("#ParallelDownloads = 5", "ParallelDownloads = 10")
+        content = content.replace("#ParallelDownloads = 5", "ParallelDownloads = 10\nIloveCandy")
         content = content.replace("#[multilib]", "[multilib]")
         content = content.replace("#Include = /etc/pacman.d/mirrorlist", "Include = /etc/pacman.d/mirrorlist")
         f.seek(0)
@@ -61,9 +61,9 @@ def configure_system(hostname, locale):
     run_cmd(f"chmod u-w {sudoers_file}")
     Print.success("Sudo is set up")
 
-    Print.info("Set root password:")
-    run_cmd("arch-chroot /mnt passwd")
-    Print.success("Root password is set up")
+    # Print.info("Set root password:")
+    # run_cmd("arch-chroot /mnt passwd")
+    # Print.success("Root password is set up")
 
     print()
 

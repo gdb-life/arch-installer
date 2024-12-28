@@ -9,14 +9,14 @@ class Print:
     }
 
     LABELS = {
-        "INFO":     "INFO",
-        "ERROR":    "FAIL",
-        "SUCCESS":  " OK ",
-        "DEBUG":    "DEBG",
+        "INFO":     "[ INFO ]",
+        "ERROR":    "[ FAIL ]",
+        "SUCCESS":  "[  OK  ]",
+        "DEBUG":    "[ DEBG ]",
     }
 
     @staticmethod
-    def log(message, level="info"):
+    def log(message, level="INFO"):
         """basic logger method"""
         color_mapping = {
             "INFO": Print.COLORS["YELLOW"],
@@ -27,7 +27,7 @@ class Print:
         color = color_mapping.get(level, Print.COLORS["WHITE"])
         label = Print.LABELS.get(level, "LOG")
 
-        label_section = f"[ {color}{label}{Print.COLORS['RESET']} ]"
+        label_section = f"{color}{label}{Print.COLORS['RESET']}"
 
         print(f"{label_section} {message}")
 
@@ -48,8 +48,14 @@ class Print:
         Print.log(message, level="DEBUG")
 
     @staticmethod
+    def data(message, data):
+        """print data message"""
+        data_message = f"{Print.COLORS['WHITE']}{message}{Print.COLORS['RESET']}{data}"
+        return print(data_message)
+
+    @staticmethod
     def input(prompt):
-        """Prompt user input with colored text."""
+        """prompt user input with colored text"""
         colored_prompt = f"{Print.COLORS['WHITE']}{prompt}{Print.COLORS['RESET']}"
         return input(colored_prompt).strip()
 
@@ -58,5 +64,6 @@ if __name__ == "__main__":
     Print.success("Successful message")
     Print.error("Error message")
     Print.debug("Debug message")
+    Print.data("Data message")
     user_input = Print.input("Input: ")
     Print.info(f"Inputed: {user_input}")

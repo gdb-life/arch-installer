@@ -8,6 +8,9 @@
         "base-devel", 
         "linux", 
         "linux-firmware", 
+        "amd-ucode",
+        "intel-ucode",
+        "vim",
         "networkmanager"
         ],
     "enable_services": [

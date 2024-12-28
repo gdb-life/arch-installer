@@ -3,12 +3,15 @@ import json
 from utils.logger import Print
 from utils.debug import Debug
 from modules import disk, check, packages, setup
+from test import test_installation
 
 def load_config(file_path):
+    """load configuration from a JSON file"""
     with open("configs/" + file_path + ".json", "r") as f:
         return json.load(f)
 
 def customize_config(config):
+    """customize the configuration"""
     config["disk"] = Print.input(f"Disk [{config.get('disk', '/dev/sda')}]: ") or config["disk"]
     config["hostname"] = Print.input(f"Hostname [{config.get('hostname', 'archlinux')}]: ") or config["hostname"]
     config["username"] = Print.input(f"Username [{config.get('username', 'user')}]: ") or config["username"]
@@ -25,15 +28,18 @@ def customize_config(config):
     return config
 
 def print_config_data(config_data):
-    Print.info(f"Disk: {config_data["disk"]}")
-    Print.info(f"Hostname: {config_data["hostname"]}")
-    Print.info(f"Username: {config_data["username"]}")
-    Print.info(f"Packages: {config_data["packages"]}")
-    Print.info(f"Locale:   {config_data["locale"]}")
-    Print.info(f"Services: {config_data["enable_services"]}")
+    """print the configuration data"""
+    Print.data("Disk:     ", config_data["disk"])
+    Print.data("Hostname: ", config_data["hostname"])
+    Print.data("Username: ", config_data["username"])
+    Print.data("Packages: ", ", ".join(config_data["packages"]))
+    Print.data("Locale:   ", config_data["locale"])
+    Print.data("Services: ", ", ".join(config_data["enable_services"]))
+    Print.input("Press Enter to continue...")
     print()
 
 def main():
+    """main function"""
     parser = argparse.ArgumentParser(description="Arch Installer: auto isntall Arch Linux")
     parser.add_argument("--config", type=str, help="path to configuration file")
     parser.add_argument("-c", "--custom", action="store_true", help="customize configuration")
@@ -43,6 +49,10 @@ def main():
 
     if args.debug:
             Debug.DEBUG = True
+
+    if args.test:
+        test_installation()
+        return
 
     if args.config:
         config_data = load_config(args.config)
@@ -68,10 +78,7 @@ def main():
         setup.enable_services(config_data["enable_services"])
         setup.finish()
 
-    elif args.test:
-        check.check_dependencies()
-        check.pacman_keys()
-        check.pacman_mirrors()
+        Print.success("Installation complete\n")
 
     else:
         Print.error("No configuration file provided. Use --config to specify a configuration")
