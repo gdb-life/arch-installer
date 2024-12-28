@@ -1,34 +1,42 @@
 # Arch Installer
 
-Arch Installer is a Python-based utility for automating the installation of Arch Linux. The tool provides options for full installation or installation without configuring disk layouts, while allowing user customization of configuration parameters.
+A Python-based utility for automating Arch Linux installation. This tool streamlines the installation process while providing flexibility for customization through configuration files.
 
-## Disclaimer
+## Features
 
-This project is not yet designed to be installed on other devices.
+- Full automated installation
+- Configurable disk partitioning
+- Package selection and configuration
+- System setup automation
+- Debug mode for detailed logging
 
 ## Requirements
 
 - Python 3.8+
-- Arch Linux ISO or a suitable environment
+- Arch Linux live environment
+- Internet connection
 
-## Installation
+## Usage
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/gdb-life/arch.git
+   git clone https://github.com/gdb-life/arch-installer.git
    cd arch-installer
    ```
 
-2. Run the installer with customization and configuration:
+2. Basic installation with standard config:
    ```bash
-   ./install --customize --config standart
+   ./install --config standart 
    ```
 
-### Debug Mode
+3. Installation with customization:
+   ```bash
+   ./install --config standart --custom
+   ```
 
 Enable detailed logging with the `--debug` flag:
    ```bash
-   ./install --config minimal --debug
+   ./install --config standart --debug
    ```
 
 ## Configuration
@@ -40,14 +48,27 @@ You can customize installation parameters using JSON files (e.g., `standard.json
   "disk": "/dev/sda",
   "hostname": "arch",
   "username": "user",
-  "locale": "en_US.UTF-8"
+  "locale": "en_US.UTF-8",
+  "packages": [
+        "base", 
+        "base-devel", 
+        "linux", 
+        "linux-firmware", 
+        "amd-ucode",
+        "intel-ucode",
+        "vim",
+        "networkmanager"
+        ],
+    "enable_services": [
+        "NetworkManager"
+    ]
 }
 ```
 
 ## Project Structure
 
 - `main.py`: Entry point for the application.
-- `utils/`: Utility functions (e.g., `run_cmd`).
+- `utils/`: Utility functions (e.g., `run_cmd`, `Print`).
 - `modules/`: Core functionalities (e.g., disk management, setup).
 - `configs/`: JSON configuration files for installation setups.
 
