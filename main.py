@@ -3,7 +3,6 @@ import json
 from utils.logger import Print
 from utils.debug import Debug
 from modules import disk, check, packages, setup
-from test import test_installation
 
 def load_config(file_path):
     with open("configs/" + file_path + ".json", "r") as f:
@@ -40,15 +39,10 @@ def main():
     parser.add_argument("--config", type=str, help="path to configuration file")
     parser.add_argument("-c", "--custom", action="store_true", help="customize configuration")
     parser.add_argument("-d", "--debug", action="store_true", help="show debug information")
-    parser.add_argument("-t", "--test", action="store_true", help="test mode")
     args = parser.parse_args()
 
     if args.debug:
             Debug.DEBUG = True
-
-    if args.test:
-        test_installation()
-        return
 
     if args.config:
         config_data = load_config(args.config)
