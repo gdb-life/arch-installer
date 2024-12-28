@@ -1,5 +1,6 @@
 import argparse
 import json
+from utils.commands import run_cmd
 from utils.logger import Print
 from utils.debug import Debug
 from modules import disk, check, packages, setup
@@ -38,6 +39,7 @@ def main():
     parser.add_argument("-c", "--custom", action="store_true", help="customize configuration")
     parser.add_argument("-p", "--print", action="store_true", help="print configuration")
     parser.add_argument("-d", "--debug", action="store_true", help="show debug information")
+    parser.add_argument("-r", "--reboot", action="store_true", help="reboot after installation")
     args = parser.parse_args()
 
     if args.debug:
@@ -70,9 +72,16 @@ def main():
     setup.configure_system(config_data["hostname"], config_data["locale"])
     setup.create_user(config_data["username"])
     setup.enable_services(config_data["enable_services"])
+    
+    setup.update_user_pacman_keys()
+    setup.update_user_pacman_mirrors()
     setup.finish()
 
     Print.success("Installation complete\n")
+
+    if args.reboot:
+        Print.info("Rebooting...")
+        run_cmd("reboot")
 
 if __name__ == "__main__":
     main()

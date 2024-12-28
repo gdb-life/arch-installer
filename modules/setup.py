@@ -82,6 +82,24 @@ def enable_services(services):
         Print.success(f"Enabling '{service}' finished")
     print()
 
+def update_user_pacman_keys():
+    keys = Print.input("Update user pacman keys? (yes/no) ").lower() == "yes"
+    if keys:
+        Print.info("Update user pacman keys...")
+        run_cmd("arch-chroot /mnt sudo pacman-key --refresh-keys")
+        Print.success("Pacman keys updated\n")  
+    print()
+
+def update_user_pacman_mirrors():
+    mirrors = Print.input("Update user pacman mirrors? (yes/no) ").lower() == "yes"
+    if mirrors:
+        Print.info("Update user pacman mirrors...")
+        run_cmd("arch-chroot /mnt sudo pacman -S --noconfirm reflector")
+        run_cmd("arch-chroot /mnt sudo reflector --verbose -l 15 -p https --sort rate --save /etc/pacman.d/mirrorlist")
+        run_cmd("arch-chroot /mnt sudo pacman -Sy --noconfirm")
+        Print.success("Pacman mirrors updated\n")
+    print()
+
 def finish():
     Print.info("Finish installation...")
     run_cmd("umount -R /mnt")
