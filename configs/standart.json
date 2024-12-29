@@ -1,19 +1,21 @@
 {
     "disk": "/dev/sda",
     "partitions": {
-        "boot": "/dev/sda1",
-        "swap": "/dev/sda2",
-        "home": "/dev/sda3"
-    },
-    "partitions_size": {
-        "boot": "1GiB",
-        "swap": "8GiB",
-        "home": "100%"
-    },
-    "partitions_format": {
-        "boot": "fat32",
-        "swap": "linux-swap",
-        "home": "btrfs"
+        "boot": [
+            "/dev/sda1",
+            "1GiB",
+            "fat32"
+        ],
+        "swap": [
+            "/dev/sda2",
+            "8GiB",
+            "linux-swap"
+        ],
+        "home": [
+            "/dev/sda3",
+            "100%",
+            "btrfs"
+        ]
     },
     "hostname": "arch",
     "username": "user",
