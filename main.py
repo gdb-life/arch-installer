@@ -11,9 +11,19 @@ def load_config(file_path):
 
 def customize_config(config):
     config["disk"] = Print.input(f"Disk [{config.get('disk', '/dev/sda')}]: ") or config["disk"]
-    config["hostname"] = Print.input(f"Hostname [{config.get('hostname', 'archlinux')}]: ") or config["hostname"]
-    config["username"] = Print.input(f"Username [{config.get('username', 'user')}]: ") or config["username"]
-    config["locale"] = Print.input(f"Locale [{config.get('locale', 'en_US')}]: ") or config["locale"]
+    run_cmd(f"lsblk {config['disk']}")
+    config["partitions"]["boot"]        = Print.input(f"Boot partition [{config.get('partitions', {}).get('boot', '/dev/sda1')}]: ") or config["partitions"]["boot"]
+    config["partitions_size"]["boot"]   = Print.input(f"Boot partition size [{config.get('partitions_size', {}).get('boot', '1GiB')}]: ") or config["partitions_size"]["boot"]
+    config["partitions_format"]["boot"] = Print.input(f"Boot partition format [{config.get('partitions_format', {}).get('boot', 'fat32')}]: ") or config["partitions_format"]["boot"]
+    config["partitions"]["swap"]        = Print.input(f"Swap partition [{config.get('partitions', {}).get('swap', '/dev/sda2')}]: ") or config["partitions"]["swap"]
+    config["partitions_format"]["swap"] = Print.input(f"Swap partition format [{config.get('partitions_format', {}).get('swap', 'linux-swap')}]: ") or config["partitions_format"]["swap"]
+    config["partitions_size"]["swap"]   = Print.input(f"Swap partition size [{config.get('partitions_size', {}).get('swap', '8GiB')}]: ") or config["partitions_size"]["swap"]
+    config["partitions"]["home"]        = Print.input(f"Home partition [{config.get('partitions', {}).get('home', '/dev/sda3')}]: ") or config["partitions"]["home"]
+    config["partitions_size"]["home"]   = Print.input(f"Home partition size [{config.get('partitions_size', {}).get('home', '100%')}]: ") or config["partitions_size"]["home"]
+    config["partitions_format"]["home"] = Print.input(f"Home partition format [{config.get('partitions_format', {}).get('home', 'btrfs')}]: ") or config["partitions_format"]["home"]
+    config["hostname"]  = Print.input(f"Hostname [{config.get('hostname', 'archlinux')}]: ") or config["hostname"]
+    config["username"]  = Print.input(f"Username [{config.get('username', 'user')}]: ") or config["username"]
+    config["locale"]    = Print.input(f"Locale [{config.get('locale', 'en_US')}]: ") or config["locale"]
 
     packages = Print.input(f"Add packages [{', '.join(config.get('packages', []))}]: ")
     if packages:
@@ -27,6 +37,9 @@ def customize_config(config):
 
 def print_config_data(config_data):
     Print.data("Disk:     ", config_data["disk"])
+    Print.data("Boot:     ", ", ".join([config_data["partitions"]["boot"], config_data["partitions_size"]["boot"], config_data["partitions_format"]["boot"]]))
+    Print.data("Swap:     ", ", ".join([config_data["partitions"]["swap"], config_data["partitions_size"]["swap"], config_data["partitions_format"]["swap"]]))
+    Print.data("Home:     ", ", ".join([config_data["partitions"]["home"], config_data["partitions_size"]["home"], config_data["partitions_format"]["home"]]))
     Print.data("Hostname: ", config_data["hostname"])
     Print.data("Username: ", config_data["username"])
     Print.data("Packages: ", ", ".join(config_data["packages"]))
@@ -62,9 +75,9 @@ def main():
     check.update_pacman_keys()
     check.update_pacman_mirrors()
 
-    disk.markup_disk(config_data["disk"])
-    disk.format_partitions(config_data["disk"])
-    disk.mount_partitions(config_data["disk"])
+    disk.markup_disk(config_data["disk"], config_data["partitions_size"], config_data["partitions_format"])
+    disk.format_partitions(config_data["partitions"], config_data["partitions_format"])
+    disk.mount_partitions(config_data["partitions"])
 
     packages.install_packages(config_data["packages"])
 

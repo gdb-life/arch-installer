@@ -15,6 +15,8 @@ A Python-based utility for automating Arch Linux installation. This tool streaml
 - Python 3.8+
 - Arch Linux live environment
 - Internet connection
+- UEFI mode
+- gpt partition table
 
 ## Usage
 
@@ -26,44 +28,22 @@ A Python-based utility for automating Arch Linux installation. This tool streaml
 
 2. Basic installation with standard config:
    ```bash
-   ./install --config standart 
+   ./install standart 
    ```
 
 3. Installation with customization:
    ```bash
-   ./install --config standart --custom
+   ./install standart --custom
    ```
 
 Enable detailed logging with the `--debug` flag:
    ```bash
-   ./install --config standart --debug
+   ./install standart --debug
    ```
 
 ## Configuration
 
-You can customize installation parameters using JSON files (e.g., `standard.json`, `minimal.json`). For example:
-
-```json
-{
-  "disk": "/dev/sda",
-  "hostname": "arch",
-  "username": "user",
-  "locale": "en_US.UTF-8",
-  "packages": [
-        "base", 
-        "base-devel", 
-        "linux", 
-        "linux-firmware", 
-        "amd-ucode",
-        "intel-ucode",
-        "vim",
-        "networkmanager"
-        ],
-    "enable_services": [
-        "NetworkManager"
-    ]
-}
-```
+You can customize installation parameters using JSON files (e.g., `standard.json`, `minimal.json`).
 
 ## Project Structure
 

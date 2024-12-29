@@ -103,5 +103,6 @@ def update_user_pacman_mirrors():
 def finish():
     Print.info("Finish installation...")
     run_cmd("umount -R /mnt")
+    run_cmd("swapoff -a")
     Print.success("Installation complete")
     print()
