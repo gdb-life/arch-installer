@@ -11,7 +11,7 @@ def load_config(file_path):
 
 def customize_config(config):
     config["disk"] = Print.input(f"Disk [{config.get('disk', '/dev/sda')}]: ") or config["disk"]
-    run_cmd(f"lsblk {config['disk']}")
+    run_cmd(f"lsblk -f {config['disk']}")
     config["partitions"]["boot"]        = Print.input(f"Boot partition [{config.get('partitions', {}).get('boot', '/dev/sda1')}]: ") or config["partitions"]["boot"]
     config["partitions_size"]["boot"]   = Print.input(f"Boot partition size [{config.get('partitions_size', {}).get('boot', '1GiB')}]: ") or config["partitions_size"]["boot"]
     config["partitions_format"]["boot"] = Print.input(f"Boot partition format [{config.get('partitions_format', {}).get('boot', 'fat32')}]: ") or config["partitions_format"]["boot"]
@@ -29,7 +29,7 @@ def customize_config(config):
     if packages:
         config["packages"].extend(packages.split(","))
 
-    services = Print.input(f"Enable services [{', '.join(config.get('enable_services', []))}]: ")
+    services = Print.input(f"Add services [{', '.join(config.get('enable_services', []))}]: ")
     if services:
         config["enable_services"].extend(services.split(","))
 
