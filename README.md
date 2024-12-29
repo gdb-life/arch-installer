@@ -36,6 +36,12 @@ A Python-based utility for automating Arch Linux installation. This tool streaml
    ./install standart --custom
    ```
 
+4. Create and save a custom configuration:
+   ```bash
+   ./install --custom --write myconfig
+   ```
+   This will create a new configuration file at `configs/myconfig.json`
+
 Enable detailed logging with the `--debug` flag:
    ```bash
    ./install standart --debug
@@ -43,7 +49,7 @@ Enable detailed logging with the `--debug` flag:
 
 ## Configuration
 
-You can customize installation parameters using JSON files (e.g., `standard.json`, `minimal.json`).
+You can customize installation parameters using JSON files (e.g., `standard.json`, `minimal.json`). Create your own configuration by using the `--custom` and `--write` flags together, which will guide you through the configuration process and save the result to a new JSON file.
 
 ## Project Structure
 

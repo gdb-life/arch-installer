@@ -5,9 +5,15 @@ from utils.logger import Print
 from utils.debug import Debug
 from modules import disk, check, packages, setup
 
-def load_config(file_path):
-    with open("configs/" + file_path + ".json", "r") as f:
+def load_config(file_name):
+    with open("configs/" + file_name + ".json", "r") as f:
         return json.load(f)
+    
+def save_config(file_name, config):
+    if not file_name:
+        file_name = Print.input("Enter the name for the configuration file: ")
+    with open(f"configs/{file_name}.json", "w") as f:
+        json.dump(config, f, indent=4)
 
 def customize_config(config):
     config["disk"] = Print.input(f"Disk [{config.get('disk', '/dev/sda')}]: ") or config["disk"]
@@ -48,6 +54,7 @@ def main():
     parser.add_argument("-p", "--print", action="store_true", help="print configuration")
     parser.add_argument("-d", "--debug", action="store_true", help="show debug information")
     parser.add_argument("-r", "--reboot", action="store_true", help="reboot after installation")
+    parser.add_argument("-w", "--write", nargs="?", const="default", help="write configuration to file with optional name")
     args = parser.parse_args()
 
     if args.debug:
@@ -60,6 +67,11 @@ def main():
 
     if args.custom:
         config_data = customize_config(config_data)
+
+    if args.write:
+        save_config(args.write if args.write != None else "default", config_data)
+        Print.success(f"Configuration saved to configs/{args.write}.json")
+        exit(0)
 
     if args.print:
         print_config_data(config_data)
