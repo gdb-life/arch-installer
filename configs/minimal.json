@@ -1,0 +1,31 @@
+{
+    "disk": "/dev/sda",
+    "partitions": {
+        "boot": [
+            "/dev/sda1",
+            "1GiB",
+            "fat32"
+        ],
+        "swap": [
+            "/dev/sda2",
+            "8GiB",
+            "linux-swap"
+        ],
+        "home": [
+            "/dev/sda3",
+            "100%",
+            "btrfs"
+        ]
+    },
+    "hostname": "arch",
+    "username": "user",
+    "locale": "en_US",
+    "packages": [
+        "base", 
+        "base-devel", 
+        "linux", 
+        "linux-firmware"
+        ],
+    "enable_services": [
+    ]
+}
