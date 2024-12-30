@@ -18,6 +18,7 @@ def save_config(file_name, config):
 def customize_config(config):
     config["disk"] = Print.input(f"Disk [{config.get('disk', '/dev/sda')}]: ") or config["disk"]
     run_cmd(f"lsblk -f {config['disk']}")
+    config["dualboot"] = Print.input(f"Dualboot [{config.get('dualboot', False)}]: ") or config["dualboot"]
     for part_name, part_data in config["partitions"].items():
         part_path = Print.input(f"{part_name.capitalize()} path [{part_data[0]}]: ") or part_data[0]
         part_size = Print.input(f"{part_name.capitalize()} size [{part_data[1]}]: ") or part_data[1]
@@ -39,6 +40,7 @@ def customize_config(config):
 
 def print_config_data(config_data):
     Print.data("Disk: ", config_data["disk"])
+    Print.data("Dualboot: ", config_data["dualboot"])
     for part_name, part_data in config_data["partitions"].items():
         Print.data(f"{part_name.capitalize()}: ", ", ".join(part_data))
     Print.data("Hostname: ", config_data["hostname"])
@@ -52,9 +54,10 @@ def main():
     parser.add_argument("config", nargs="?", help="Name of the configuration file (without .json)")
     parser.add_argument("-c", "--custom", action="store_true", help="customize configuration")
     parser.add_argument("-p", "--print", action="store_true", help="print configuration")
+    parser.add_argument("-w", "--write", nargs="?", const="default", help="write configuration to file with optional name")
     parser.add_argument("-d", "--debug", action="store_true", help="show debug information")
     parser.add_argument("-r", "--reboot", action="store_true", help="reboot after installation")
-    parser.add_argument("-w", "--write", nargs="?", const="default", help="write configuration to file with optional name")
+    parser.add_argument("-db", "--dualboot", action="store_true", help="enable dualboot mode (don't format boot partition, install GRUB tools for second OS)")
     args = parser.parse_args()
 
     if args.debug:
@@ -77,6 +80,9 @@ def main():
         print_config_data(config_data)
         exit(0)
 
+    if args.dualboot:
+        config_data["dualboot"] = True
+
     check.check_dependencies()
     Print.info("The following updates will be made on the image")
     check.update_pacman_keys()
@@ -87,12 +93,12 @@ def main():
     partitions_format = {key: value[2] for key, value in config_data["partitions"].items()}
 
     disk.markup_disk(config_data["disk"], partitions_size, partitions_format)
-    disk.format_partitions(partitions, partitions_format)
+    disk.format_partitions(partitions, partitions_format, config_data["dualboot"])
     disk.mount_partitions(partitions)
 
     packages.install_packages(config_data["packages"])
 
-    setup.install_grub(config_data["disk"])
+    setup.install_grub(config_data["disk"], config_data["dualboot"])
     setup.configure_system(config_data["hostname"], config_data["locale"])
     setup.create_user(config_data["username"])
     setup.enable_services(config_data["enable_services"])

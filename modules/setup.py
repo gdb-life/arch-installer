@@ -1,11 +1,23 @@
 from utils.logger import Print
 from utils.commands import run_cmd
 
-def install_grub(disk):
+def install_grub(disk, dualboot):
     Print.info("Installing GRUB...")
-    grub_packages = ["grub", "efibootmgr"]
+    if not dualboot:
+        grub_packages = ["grub", "efibootmgr"]
+    else:
+        grub_packages = ["grub", "efibootmgr", "os-prober"]
     run_cmd("arch-chroot /mnt pacman -S --noconfirm " + " ".join(grub_packages))
     run_cmd(f"arch-chroot /mnt grub-install {disk}")
+    if dualboot:
+        locale_file = "/mnt/etc/default/grub"
+        with open(locale_file, "r+") as f:
+            content = f.read()
+            content = content.replace("#GRUB_DISABLE_OS_PROBER=false", "GRUB_DISABLE_OS_PROBER=false")
+            f.seek(0)
+            f.write(content)
+            f.truncate()
+        run_cmd("arch-chroot /mnt os-prober")
     run_cmd("arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg")
     Print.success("Installing GRUB complete")
     print()

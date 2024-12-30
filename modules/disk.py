@@ -51,12 +51,13 @@ def markup_disk(disk, partitions_size, partitions_format):
     Print.success("Partitioning complete")
     print()
 
-def format_partitions(partitions, partitions_format):
+def format_partitions(partitions, partitions_format, dualboot):
     Print.info("Formatting disks...")
-    if partitions_format['boot'].lower() == "fat32":
-        run_cmd(f"mkfs.fat -F 32 {partitions['boot']}")
-    else:
-        run_cmd(f"mkfs.{partitions_format['boot']} {partitions['boot']}")
+    if not dualboot:
+        if partitions_format['boot'].lower() == "fat32":
+            run_cmd(f"mkfs.fat -F 32 {partitions['boot']}")
+        else:
+            run_cmd(f"mkfs.{partitions_format['boot']} {partitions['boot']}")
     run_cmd(f"mkswap {partitions['swap']}")
     run_cmd(f"swapon {partitions['swap']}")
     if partitions_format['home'].lower() == "btrfs":

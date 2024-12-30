@@ -1,5 +1,6 @@
 {
     "disk": "/dev/sda",
+    "dualboot": false,
     "partitions": {
         "boot": [
             "/dev/sda1",
