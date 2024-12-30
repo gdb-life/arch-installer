@@ -8,8 +8,6 @@ def signature_boundaries(begin, size):
         begin = int(begin[:-3])
     elif "KiB" in begin:
         begin = int(begin[:-3]) / 1024
-    elif "%" in begin:
-        return f"{begin} {size}"
 
     if "GiB" in size:
         size = int(size[:-3]) * 1024
@@ -17,7 +15,10 @@ def signature_boundaries(begin, size):
         size = int(size[:-3])
     elif "KiB" in size:
         size = int(size[:-3]) / 1024
-    elif "%" in size:
+
+    if "%" in begin:
+        return f"{begin} {size}MiB"
+    if "%" in size:
         return f"{begin}MiB {size}"
     
     return f"{begin}MiB {size+begin}MiB"
