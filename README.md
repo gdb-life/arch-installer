@@ -9,6 +9,7 @@ A Python-based utility for automating Arch Linux installation. This tool streaml
 - Package selection and configuration
 - System setup automation
 - Debug mode for detailed logging
+- Dual boot support with existing operating systems
 
 ## Requirements
 
@@ -42,6 +43,12 @@ A Python-based utility for automating Arch Linux installation. This tool streaml
    ```
    This will create a new configuration file at `configs/myconfig.json`
 
+5. Install alongside existing OS (dual boot):
+   ```bash
+   ./install standart --dualboot
+   ```
+   This will preserve the existing EFI partition and configure GRUB to detect other operating systems
+
 Enable detailed logging with the `--debug` flag:
    ```bash
    ./install standart --debug
@@ -50,6 +57,8 @@ Enable detailed logging with the `--debug` flag:
 ## Configuration
 
 You can customize installation parameters using JSON files (e.g., `standard.json`, `minimal.json`). Create your own configuration by using the `--custom` and `--write` flags together, which will guide you through the configuration process and save the result to a new JSON file.
+
+The `dualboot` option can be configured either through the JSON config file or using the `--dualboot` flag. When enabled, it preserves the existing boot partition and installs necessary tools (os-prober) to detect other operating systems.
 
 ## Project Structure
 
