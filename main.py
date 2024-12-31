@@ -97,6 +97,7 @@ def main():
     disk.mount_partitions(partitions)
 
     packages.install_packages(config_data["packages"])
+    packages.install_yay()
 
     setup.install_grub(config_data["disk"], config_data["dualboot"])
     setup.configure_system(config_data["hostname"], config_data["locale"])
