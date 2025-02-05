@@ -3,13 +3,16 @@
     "dualboot": false,
     "partitions": {
         "boot": ["/dev/sda1", "1G", "fat32"],
-        "swap": ["/dev/sda2", "8G", "linux-swap"],
-        "home": ["/dev/sda3", "100%", "btrfs"]
+        "vg": {
+            "partition": ["/dev/sda2", "100%", "lvm"],
+            "lv_swap": ["/dev/vg/lv_swap", "8G", "linux-swap"],
+            "lv_home": ["/dev/vg/lv_home", "100%", "btrfs"]
+        }
     },
-    "hostname": "arch",
-    "username": "user",
+    "hostname": "gdb",
+    "username": "tvs",
     "locale": "en_US",
-    "timezone": "Europe/Moscow",
+    "timezone": "America/New_York",
     "packages": ["base", "base-devel", "linux", "linux-firmware", "amd-ucode", "intel-ucode", "vim", "networkmanager"],
     "enable_services": ["NetworkManager"]
 }

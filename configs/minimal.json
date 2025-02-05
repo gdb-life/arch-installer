@@ -2,31 +2,13 @@
     "disk": "/dev/sda",
     "dualboot": false,
     "partitions": {
-        "boot": [
-            "/dev/sda1",
-            "1GiB",
-            "fat32"
-        ],
-        "swap": [
-            "/dev/sda2",
-            "8GiB",
-            "linux-swap"
-        ],
-        "home": [
-            "/dev/sda3",
-            "100%",
-            "btrfs"
-        ]
+        "boot": ["/dev/sda1", "1G", "fat32"],
+        "home": ["/dev/sda3", "100%", "btrfs"]
     },
     "hostname": "arch",
     "username": "user",
     "locale": "en_US",
-    "packages": [
-        "base", 
-        "base-devel", 
-        "linux", 
-        "linux-firmware"
-        ],
-    "enable_services": [
-    ]
+    "timezone": "America/New_York",
+    "packages": ["base", "base-devel", "linux", "linux-firmware"],
+    "enable_services": []
 }

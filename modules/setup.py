@@ -79,6 +79,11 @@ def configure_system(hostname, locale):
 
     print()
 
+def timezone(timezone):
+    run_cmd(f"timedatectl set-timezone {timezone}")
+    run_cmd(f"timedatectl set-ntp 1")
+    run_cmd(f"timedatectl set-local-rtc 1")
+
 def create_user(username):
     Print.info(f"Creating user '{username}'...")
     run_cmd(f"arch-chroot /mnt useradd -m -G wheel {username}")

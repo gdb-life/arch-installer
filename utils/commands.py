@@ -24,10 +24,10 @@ def run_cmd(command):
         # Print.error(f"{error_message}")
         Print.error(f"Failed: {command}")
         Print.error(f"{e}")
-        input()
+        input("")
     except FileNotFoundError:
         Print.error(f"Command not found: {command}")
-        input()
+        input("")
 
 if __name__ == "__main__":
     DEBUG = True

@@ -83,23 +83,17 @@ def main():
     if args.dualboot:
         config_data["dualboot"] = True
 
-    check.check_dependencies()
-    Print.info("The following updates will be made on the image")
-    check.update_pacman_keys()
-    check.update_pacman_mirrors()
+    check.dependencies()
 
-    partitions = {key: value[0] for key, value in config_data["partitions"].items()}
-    partitions_size = {key: value[1] for key, value in config_data["partitions"].items()}
-    partitions_format = {key: value[2] for key, value in config_data["partitions"].items()}
-
-    disk.markup_disk(config_data["disk"], partitions_size, partitions_format)
-    disk.format_partitions(partitions, partitions_format, config_data["dualboot"])
-    disk.mount_partitions(partitions)
+    disk.markup_disk(config_data["disk"], config_data["partitions"])
+    disk.format_partitions(config_data["partitions"], config_data["dualboot"])
+    disk.mount_partitions(config_data["partitions"])
 
     packages.install_packages(config_data["packages"])
 
     setup.install_grub(config_data["disk"], config_data["dualboot"])
     setup.configure_system(config_data["hostname"], config_data["locale"])
+    setup.timezone(config_data["timezone"])
     setup.create_user(config_data["username"])
     setup.enable_services(config_data["enable_services"])
     
