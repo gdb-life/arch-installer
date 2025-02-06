@@ -54,7 +54,7 @@ def customize_config(config):
     config["partitions"] = partitions
     config["hostname"]  = Print.input(f"Hostname [{config.get('hostname', 'archlinux')}]: ") or config["hostname"]
     config["username"]  = Print.input(f"Username [{config.get('username', 'user')}]: ") or config["username"]
-    config["locale"]    = Print.input(f"Locale [{config.get('locale', 'en_US.UTF-8')}]: ") or config["locale"]
+    config["locale"]    = Print.input(f"Locale [{config.get('locale', 'en_US')}]: ") or config["locale"]
     config["timezone"]  = Print.input(f"Timezone [{config.get('timezone', 'UTC')}]: ") or config["timezone"]
     
     packages = Print.input(f"Add packages [{', '.join(config.get('packages', []))}]: ")
