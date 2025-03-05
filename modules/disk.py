@@ -132,8 +132,12 @@ def mount_partitions(partitions):
 
         part, _, format = partition_data
 
+        Print.debug("Before checking boot portition")
+        input()
         if "boot" in partition_name:
-            run_cmd(f"mount --mkdir {part} /mnt/boot/efi")
+            run_cmd(f"mount --mkdir {part} /mnt/boot/efi")  # write checkbox for this (not working)
+            Print.debug("mounting /dev/boot /mnt/boot/efi")
+            input()
             continue
         
         if "linux-swap" in format:
